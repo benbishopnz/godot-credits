@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://GodotCredits.gd" type="Script" id=1]
+
+[node name="GodotCredits" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+color = Color( 0, 0, 0, 1 )
+
+[node name="CreditsContainer" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 1920.0
+margin_bottom = 1080.0
+
+[node name="Line" type="Label" parent="CreditsContainer"]
+anchor_right = 1.0
+margin_top = 1080.0
+margin_bottom = 1094.0
+size_flags_horizontal = 3
+text = "Credits line"
+align = 1
+
