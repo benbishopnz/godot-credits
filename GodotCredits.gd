@@ -4,12 +4,12 @@ const section_time := 2.0
 const line_time := 0.3
 const base_speed := 100
 const speed_up_multiplier := 10.0
-const title_color := Color.blueviolet
+const title_color := Color.BLUE_VIOLET
 
 var scroll_speed := base_speed
 var speed_up := false
 
-onready var line := $CreditsContainer/Line
+@onready var line := $CreditsLine
 var started := false
 var finished := false
 
@@ -56,10 +56,20 @@ var credits = [
 	]
 ]
 
+#this section iterates the license file, making it the second s
+func _ready():
+	var licensefile = FileAccess.open("res://license.txt", FileAccess.READ)
+	credits.push_back([licensefile.get_line(), licensefile.get_line(), licensefile.get_line(), licensefile.get_line()])
+	while licensefile.get_position() < licensefile.get_length():
+		credits[credits.size() - 1].push_back(licensefile.get_line())
+		credits[credits.size() - 1].push_back(licensefile.get_line())
+		credits[credits.size() - 1].push_back(licensefile.get_line())
+		credits[credits.size() - 1].push_back(licensefile.get_line())
+	
 
 func _process(delta):
+	@warning_ignore("shadowed_variable")
 	var scroll_speed = base_speed * delta
-	
 	if section_next:
 		section_timer += delta * speed_up_multiplier if speed_up else delta
 		if section_timer >= section_time:
@@ -82,8 +92,8 @@ func _process(delta):
 	
 	if lines.size() > 0:
 		for l in lines:
-			l.rect_position.y -= scroll_speed
-			if l.rect_position.y < -l.get_line_height():
+			l.global_position.y -= scroll_speed
+			if l.global_position.y < -l.get_line_height():
 				lines.erase(l)
 				l.queue_free()
 	elif started:
@@ -102,8 +112,6 @@ func add_line():
 	var new_line = line.duplicate()
 	new_line.text = section.pop_front()
 	lines.append(new_line)
-	if curr_line == 0:
-		new_line.add_color_override("font_color", title_color)
 	$CreditsContainer.add_child(new_line)
 	
 	if section.size() > 0:
@@ -120,3 +128,4 @@ func _unhandled_input(event):
 		speed_up = true
 	if event.is_action_released("ui_down") and !event.is_echo():
 		speed_up = false
+
